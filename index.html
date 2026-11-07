@@ -1,0 +1,1633 @@
+<!doctype html>
+<html lang="pl">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Logarytmy: sprawdzam, co umiem</title>
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.css"
+    />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.16.9/katex.min.js"></script>
+    <style>
+      :root {
+        --bg: #f6f4ef;
+        --karta: #fff;
+        --tekst: #1d1d1f;
+        --szary: #6b6b70;
+        --akcent: #2f5bd3;
+        --akcent2: #e8eefc;
+        --dobrze: #1f8a4c;
+        --zle: #c0392b;
+        --brak: #b7791f;
+        --linia: #e3e0d8;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme="light"]) {
+          --bg: #16171a;
+          --karta: #202227;
+          --tekst: #ececef;
+          --szary: #a0a0a8;
+          --akcent: #7ea2ff;
+          --akcent2: #26304a;
+          --dobrze: #4cc47f;
+          --zle: #ff7b6b;
+          --brak: #e8b04a;
+          --linia: #33363d;
+        }
+      }
+      :root[data-theme="dark"] {
+        --bg: #16171a;
+        --karta: #202227;
+        --tekst: #ececef;
+        --szary: #a0a0a8;
+        --akcent: #7ea2ff;
+        --akcent2: #26304a;
+        --dobrze: #4cc47f;
+        --zle: #ff7b6b;
+        --brak: #e8b04a;
+        --linia: #33363d;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        background: var(--bg);
+        color: var(--tekst);
+        font:
+          17px/1.5 -apple-system,
+          BlinkMacSystemFont,
+          "Segoe UI",
+          Roboto,
+          sans-serif;
+      }
+      main {
+        max-width: 600px;
+        margin: 0 auto;
+        padding: 16px 16px 60px;
+      }
+      h1 {
+        font-size: 26px;
+        margin: 8px 0 4px;
+      }
+      h2 {
+        font-size: 20px;
+        margin: 22px 0 8px;
+      }
+      .karta {
+        background: var(--karta);
+        border: 1px solid var(--linia);
+        border-radius: 14px;
+        padding: 18px;
+        margin: 14px 0;
+      }
+      .szary {
+        color: var(--szary);
+        font-size: 15px;
+      }
+      button {
+        font: inherit;
+        border: 0;
+        border-radius: 12px;
+        padding: 14px 18px;
+        cursor: pointer;
+      }
+      .glowny {
+        background: var(--akcent);
+        color: #fff;
+        font-weight: 600;
+        width: 100%;
+      }
+      .drugi {
+        background: var(--akcent2);
+        color: var(--tekst);
+      }
+      .rzad {
+        display: flex;
+        gap: 10px;
+        margin-top: 14px;
+      }
+      .rzad button {
+        flex: 1;
+      }
+      .pasek {
+        height: 8px;
+        background: var(--linia);
+        border-radius: 8px;
+        overflow: hidden;
+        margin: 6px 0 2px;
+      }
+      .pasek div {
+        height: 100%;
+        background: var(--akcent);
+        transition: width 0.2s;
+      }
+      .sekcja {
+        font-size: 14px;
+        font-weight: 600;
+        color: var(--akcent);
+        text-transform: uppercase;
+        letter-spacing: 0.04em;
+      }
+      .pytanie {
+        font-size: 21px;
+        margin: 10px 0 16px;
+        overflow-x: auto;
+      }
+      .pytanie .katex {
+        font-size: 1.25em;
+      }
+      input[type="text"] {
+        font: inherit;
+        font-size: 22px;
+        width: 100%;
+        padding: 12px 14px;
+        border: 2px solid var(--linia);
+        border-radius: 12px;
+        background: var(--bg);
+        color: var(--tekst);
+      }
+      input[type="text"]:focus {
+        outline: none;
+        border-color: var(--akcent);
+      }
+      .opcja {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        width: 100%;
+        text-align: left;
+        background: var(--bg);
+        border: 2px solid var(--linia);
+        margin: 8px 0;
+        padding: 12px 14px;
+        color: var(--tekst);
+      }
+      .opcja.wybrana {
+        border-color: var(--akcent);
+        background: var(--akcent2);
+      }
+      .opcja .znak {
+        flex: none;
+        width: 24px;
+        height: 24px;
+        border: 2px solid var(--szary);
+        border-radius: 50%;
+      }
+      .opcja.multi .znak {
+        border-radius: 6px;
+      }
+      .opcja.wybrana .znak {
+        background: var(--akcent);
+        border-color: var(--akcent);
+      }
+      .blad {
+        color: var(--zle);
+        font-size: 15px;
+        min-height: 22px;
+        margin-top: 6px;
+      }
+      .wstep-sekcji {
+        background: var(--akcent2);
+        border-radius: 12px;
+        padding: 12px 14px;
+        font-size: 15px;
+        margin-bottom: 12px;
+      }
+      table {
+        border-collapse: collapse;
+        width: 100%;
+        font-size: 15px;
+      }
+      td,
+      th {
+        padding: 7px 6px;
+        border-bottom: 1px solid var(--linia);
+        text-align: left;
+        vertical-align: top;
+      }
+      .ok {
+        color: var(--dobrze);
+        font-weight: 600;
+      }
+      .nie {
+        color: var(--zle);
+        font-weight: 600;
+      }
+      .nw {
+        color: var(--brak);
+        font-weight: 600;
+      }
+      .zakres li {
+        margin: 6px 0;
+      }
+      details summary {
+        cursor: pointer;
+        font-weight: 600;
+      }
+      .male {
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <main id="app"></main>
+    <script>
+      /* Pytania diagnostyczne do sekcji 1.10 „Logarytm i jego własności”.
+   Każde pytanie: id, sekcja, typ (num / wybor / multi), treść ze wzorem w $...$,
+   wersja tekstowa do raportu, dobra odpowiedź, typowe złe odpowiedzi z nazwą błędu,
+   źródło w podręczniku. */
+      const SEKCJE = {
+        P: {
+          n: "Potęgi i pierwiastki",
+          d: "Logarytm to wykładnik potęgi. Najpierw sprawdzam, czy potęgi i pierwiastki są pewne, bo bez nich logarytmy się nie liczą.",
+        },
+        D: {
+          n: "Co to jest logarytm",
+          d: "Tu nic nie liczysz. Sprawdzam, czy wiesz, co oznacza zapis logarytmu i kiedy logarytm w ogóle istnieje.",
+        },
+        L: {
+          n: "Logarytm dziesiętny",
+          d: "Zapis log bez małej liczby na dole.",
+        },
+        C: {
+          n: "Wynik to liczba całkowita dodatnia",
+          d: "Pytanie zawsze brzmi: do jakiej potęgi podnieść podstawę, żeby dostać liczbę?",
+        },
+        U: {
+          n: "Wynik ujemny albo ułamek",
+          d: "Tu w środku są ułamki i pierwiastki.",
+        },
+        Z: {
+          n: "Podstawa to ułamek albo pierwiastek",
+          d: "Mała liczba na dole nie zawsze jest całkowita.",
+        },
+        O: {
+          n: "Brakuje podstawy albo liczby",
+          d: "Tym razem znasz wynik logarytmu, a szukasz czegoś innego.",
+        },
+        W: {
+          n: "Wzory: iloczyn, iloraz, potęga",
+          d: "Trzy wzory z ramki w podręczniku i zadania z nich.",
+        },
+      };
+      // QSTART
+      const Q = [
+        // P: przygotowanie z potęg
+        {
+          id: "P1",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $2^5$",
+          x: "2^5",
+          a: 32,
+          z: [[10, "mnoży podstawę przez wykładnik"]],
+          zr: "potęgi",
+        },
+        {
+          id: "P2",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $2^{-3}$",
+          x: "2^(-3)",
+          a: 1 / 8,
+          z: [
+            [-8, "ujemny wykładnik traktuje jak wynik ujemny"],
+            [-6, "mnoży podstawę przez wykładnik"],
+            [8, "gubi minus w wykładniku"],
+          ],
+          zr: "potęgi",
+        },
+        {
+          id: "P3",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $10^{-2}$",
+          x: "10^(-2)",
+          a: 0.01,
+          z: [
+            [-100, "ujemny wykładnik traktuje jak wynik ujemny"],
+            [-20, "mnoży podstawę przez wykładnik"],
+            [100, "gubi minus w wykładniku"],
+          ],
+          zr: "potęgi",
+        },
+        {
+          id: "P4",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $\\left(\\tfrac{1}{3}\\right)^{-2}$",
+          x: "(1/3)^(-2)",
+          a: 9,
+          z: [
+            [1 / 9, "gubi minus w wykładniku"],
+            [-9, "ujemny wykładnik traktuje jak wynik ujemny"],
+          ],
+          zr: "potęgi",
+        },
+        {
+          id: "P5",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $2^0$",
+          x: "2^0",
+          a: 1,
+          z: [
+            [0, "myśli, że potęga zerowa daje 0"],
+            [2, "myśli, że potęga zerowa nic nie zmienia"],
+          ],
+          zr: "potęgi",
+        },
+        {
+          id: "P6",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $9^{\\frac{1}{2}}$",
+          x: "9^(1/2)",
+          a: 3,
+          z: [[4.5, "dzieli przez 2 zamiast pierwiastkować"]],
+          zr: "potęgi",
+        },
+        {
+          id: "P7",
+          s: "P",
+          t: "num",
+          q: "Oblicz: $8^{\\frac{1}{3}}$",
+          x: "8^(1/3)",
+          a: 2,
+          z: [[8 / 3, "dzieli przez 3 zamiast pierwiastkować"]],
+          zr: "potęgi",
+        },
+        {
+          id: "P8",
+          s: "P",
+          t: "num",
+          q: "Wpisz wykładnik $x$: $\\;\\sqrt{3} = 3^{x}$",
+          x: "√3 = 3^x",
+          a: 1 / 2,
+          z: [[2, "myli pierwiastek z kwadratem"]],
+          zr: "potęgi",
+        },
+        {
+          id: "P9",
+          s: "P",
+          t: "num",
+          q: "Wpisz wykładnik $x$: $\\;\\sqrt[4]{3} = 3^{x}$",
+          x: "∜3 = 3^x",
+          a: 1 / 4,
+          z: [[4, "myli pierwiastek z potęgą"]],
+          zr: "potęgi",
+        },
+        {
+          id: "P10",
+          s: "P",
+          t: "num",
+          q: "Wpisz wykładnik $x$: $\\;3\\sqrt{3} = 3^{x}$",
+          x: "3√3 = 3^x",
+          a: 3 / 2,
+          z: [
+            [1 / 2, "gubi trójkę przed pierwiastkiem"],
+            [1, "nie wie, jak połączyć 3 i √3"],
+          ],
+          zr: "potęgi",
+        },
+        {
+          id: "P11",
+          s: "P",
+          t: "num",
+          q: "Wpisz wykładnik $x$: $\\;\\dfrac{1}{\\sqrt{27}} = 3^{x}$",
+          x: "1/√27 = 3^x",
+          a: -3 / 2,
+          z: [
+            [3 / 2, "gubi minus przy odwrotności"],
+            [-1 / 2, "zapomina, że 27 to 3^3"],
+          ],
+          zr: "potęgi",
+        },
+        {
+          id: "P12",
+          s: "P",
+          t: "num",
+          q: "Wpisz wykładnik $x$: $\\;0{,}25 = 2^{x}$",
+          x: "0,25 = 2^x",
+          a: -2,
+          z: [
+            [2, "gubi minus przy odwrotności"],
+            [1 / 4, "wpisuje liczbę zamiast wykładnika"],
+          ],
+          zr: "potęgi",
+        },
+
+        // D: sens i zapis
+        {
+          id: "D1",
+          s: "D",
+          t: "wybor",
+          q: "Zapis $\\log_2 8 = 3$ znaczy to samo co:",
+          x: "log_2 8 = 3 znaczy",
+          o: [
+            { t: "2 do potęgi 3 daje 8", ok: 1 },
+            { t: "3 do potęgi 2 daje 8", z: "myli podstawę z wynikiem" },
+            {
+              t: "8 do potęgi 3 daje 2",
+              z: "myli podstawę z liczbą logarytmowaną",
+            },
+            {
+              t: "8 podzielone przez 2 daje… 3",
+              z: "myśli, że logarytm to dzielenie",
+            },
+          ],
+          zr: "definicja",
+        },
+        {
+          id: "D2",
+          s: "D",
+          t: "wybor",
+          q: "W zapisie $\\log_5 125 = 3$ <b>podstawa logarytmu</b> to:",
+          x: "podstawa w log_5 125 = 3",
+          o: [
+            { t: "5", ok: 1 },
+            { t: "125", z: "myli podstawę z liczbą logarytmowaną" },
+            { t: "3", z: "myli podstawę z wynikiem" },
+          ],
+          zr: "nazwy",
+        },
+        {
+          id: "D3",
+          s: "D",
+          t: "wybor",
+          q: "W zapisie $\\log_5 125 = 3$ <b>liczba logarytmowana</b> to:",
+          x: "liczba logarytmowana w log_5 125 = 3",
+          o: [
+            { t: "125", ok: 1 },
+            { t: "5", z: "myli liczbę logarytmowaną z podstawą" },
+            { t: "3", z: "myli liczbę logarytmowaną z wynikiem" },
+          ],
+          zr: "nazwy",
+        },
+        {
+          id: "D4",
+          s: "D",
+          t: "wybor",
+          q: "Równość $3^4 = 81$ zapisana logarytmem to:",
+          x: "3^4 = 81 jako logarytm",
+          o: [
+            { t: "$\\log_3 81 = 4$", ok: 1 },
+            { t: "$\\log_4 81 = 3$", z: "zamienia podstawę z wykładnikiem" },
+            { t: "$\\log_{81} 3 = 4$", z: "zamienia podstawę z liczbą" },
+            { t: "$\\log_3 4 = 81$", z: "zamienia liczbę z wynikiem" },
+          ],
+          zr: "definicja",
+        },
+        {
+          id: "D5",
+          s: "D",
+          t: "multi",
+          q: "Zaznacz <b>wszystkie</b> zapisy, które <b>nie mają sensu</b> (taki logarytm nie istnieje):",
+          x: "które logarytmy nie istnieją",
+          o: [
+            {
+              t: "$\\log_2 (-4)$",
+              ok: 1,
+              z: "nie wie, że liczba logarytmowana musi być dodatnia",
+            },
+            {
+              t: "$\\log_2 \\tfrac14$",
+              z: "myśli, że ułamek nie może być pod logarytmem",
+            },
+            {
+              t: "$\\log_1 5$",
+              ok: 1,
+              z: "nie wie, że podstawa nie może być 1",
+            },
+            {
+              t: "$\\log_{\\frac12} 4$",
+              z: "myśli, że podstawa nie może być ułamkiem",
+            },
+            {
+              t: "$\\log_2 0$",
+              ok: 1,
+              z: "nie wie, że logarytm z 0 nie istnieje",
+            },
+            {
+              t: "$\\log_{-2} 4$",
+              ok: 1,
+              z: "nie wie, że podstawa musi być dodatnia",
+            },
+          ],
+          zr: "definicja (warunki a>0, a≠1, b>0)",
+        },
+        {
+          id: "D6",
+          s: "D",
+          t: "wybor",
+          q: "Dlaczego $\\log_a 1 = 0$ (dla każdej dobrej podstawy $a$)?",
+          x: "dlaczego log_a 1 = 0",
+          o: [
+            { t: "bo $a^0 = 1$", ok: 1 },
+            { t: "bo $1 \\cdot a = a$", z: "nie łączy wzoru z definicją" },
+            { t: "bo $a - a = 0$", z: "nie łączy wzoru z definicją" },
+            { t: "bo $1^a = 0$", z: "myli kolejność w potędze" },
+          ],
+          zr: "Ćw. 4",
+        },
+        {
+          id: "D7",
+          s: "D",
+          t: "wybor",
+          q: "Dlaczego $\\log_a a = 1$?",
+          x: "dlaczego log_a a = 1",
+          o: [
+            { t: "bo $a^1 = a$", ok: 1 },
+            { t: "bo $a : a = 1$", z: "myśli, że logarytm to dzielenie" },
+            { t: "bo $1^a = a$", z: "myli kolejność w potędze" },
+          ],
+          zr: "Ćw. 4",
+        },
+
+        // L: logarytm dziesiętny
+        {
+          id: "L1",
+          s: "L",
+          t: "wybor",
+          q: "Zapis $\\log 100$ (bez małej liczby na dole) to logarytm o podstawie:",
+          x: "podstawa logarytmu bez podpisu",
+          o: [
+            { t: "10", ok: 1 },
+            { t: "2", z: "nie zna zapisu logarytmu dziesiętnego" },
+            { t: "1", z: "nie zna zapisu logarytmu dziesiętnego" },
+            {
+              t: "nie ma podstawy, więc nie da się policzyć",
+              z: "nie zna zapisu logarytmu dziesiętnego",
+            },
+          ],
+          zr: "definicja",
+        },
+        {
+          id: "L2",
+          s: "L",
+          t: "num",
+          q: "Oblicz: $\\log 1000$",
+          x: "log 1000",
+          a: 3,
+          z: [[100, "dzieli przez podstawę zamiast szukać wykładnika"]],
+          zr: "Ćw. 1",
+        },
+        {
+          id: "L3",
+          s: "L",
+          t: "num",
+          q: "Oblicz: $\\log 0{,}01$",
+          x: "log 0,01",
+          a: -2,
+          z: [[2, "gubi minus przy liczbie mniejszej od 1"]],
+          zr: "Ćw. 1",
+        },
+        {
+          id: "L4",
+          s: "L",
+          t: "num",
+          q: "Oblicz: $\\log 1$",
+          x: "log 1",
+          a: 0,
+          z: [
+            [1, "myli log 1 z log 10"],
+            [10, "myli log 1 z podstawą"],
+          ],
+          zr: "log_a 1 = 0",
+        },
+        {
+          id: "L5",
+          s: "L",
+          t: "num",
+          q: "Oblicz: $\\log \\sqrt{10}$",
+          x: "log √10",
+          a: 1 / 2,
+          z: [[2, "myli pierwiastek z kwadratem"]],
+          zr: "Ćw. 1",
+        },
+        {
+          id: "L6",
+          s: "L",
+          t: "num",
+          q: "Oblicz: $\\log \\sqrt[3]{10}$",
+          x: "log ∛10",
+          a: 1 / 3,
+          z: [[3, "myli pierwiastek z potęgą"]],
+          zr: "Ćw. 1",
+        },
+
+        // C: wynik całkowity dodatni
+        {
+          id: "C1",
+          s: "C",
+          t: "num",
+          q: "Oblicz: $\\log_2 32$",
+          x: "log_2 32",
+          a: 5,
+          z: [[16, "dzieli przez podstawę zamiast szukać wykładnika"]],
+          zr: "Zad. 1",
+        },
+        {
+          id: "C2",
+          s: "C",
+          t: "num",
+          q: "Oblicz: $\\log_3 81$",
+          x: "log_3 81",
+          a: 4,
+          z: [
+            [27, "dzieli przez podstawę zamiast szukać wykładnika"],
+            [9, "pierwiastkuje zamiast szukać wykładnika"],
+          ],
+          zr: "Ćw. 3",
+        },
+        {
+          id: "C3",
+          s: "C",
+          t: "num",
+          q: "Oblicz: $\\log_{25} 625$",
+          x: "log_25 625",
+          a: 2,
+          z: [
+            [25, "dzieli przez podstawę zamiast szukać wykładnika"],
+            [4, "liczy w piątkach zamiast w podstawie 25"],
+          ],
+          zr: "Przykład 3",
+        },
+        {
+          id: "C4",
+          s: "C",
+          t: "num",
+          q: "Oblicz: $\\log_2 2$",
+          x: "log_2 2",
+          a: 1,
+          z: [
+            [0, "myli log_a a z log_a 1"],
+            [2, "przepisuje liczbę"],
+          ],
+          zr: "log_a a = 1",
+        },
+        {
+          id: "C5",
+          s: "C",
+          t: "num",
+          q: "Oblicz: $\\log_3 1$",
+          x: "log_3 1",
+          a: 0,
+          z: [
+            [1, "myli log_a 1 z log_a a"],
+            [3, "przepisuje podstawę"],
+          ],
+          zr: "Zad. 2",
+        },
+
+        // U: wynik ujemny albo ułamek
+        {
+          id: "U1",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_2 \\dfrac{1}{8}$",
+          x: "log_2 (1/8)",
+          a: -3,
+          z: [
+            [3, "gubi minus przy odwrotności"],
+            [1 / 3, "wynik zapisuje jako odwrotność"],
+            [-1 / 3, "wynik zapisuje jako odwrotność"],
+          ],
+          zr: "Ćw. 2",
+        },
+        {
+          id: "U2",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_3 \\dfrac{1}{9}$",
+          x: "log_3 (1/9)",
+          a: -2,
+          z: [
+            [2, "gubi minus przy odwrotności"],
+            [1 / 2, "wynik zapisuje jako odwrotność"],
+          ],
+          zr: "Ćw. 3",
+        },
+        {
+          id: "U3",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_2 \\sqrt{2}$",
+          x: "log_2 √2",
+          a: 1 / 2,
+          z: [[2, "myli pierwiastek z kwadratem"]],
+          zr: "Ćw. 2",
+        },
+        {
+          id: "U4",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_3 \\sqrt[3]{3}$",
+          x: "log_3 ∛3",
+          a: 1 / 3,
+          z: [[3, "myli pierwiastek z potęgą"]],
+          zr: "Ćw. 3",
+        },
+        {
+          id: "U5",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_2 \\sqrt[5]{2}$",
+          x: "log_2 ⁵√2",
+          a: 1 / 5,
+          z: [[5, "myli pierwiastek z potęgą"]],
+          zr: "Zad. 1",
+        },
+        {
+          id: "U6",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_3 3\\sqrt{3}$",
+          x: "log_3 3√3",
+          a: 3 / 2,
+          z: [
+            [1 / 2, "gubi trójkę przed pierwiastkiem"],
+            [1, "gubi pierwiastek"],
+          ],
+          zr: "Zad. 2",
+        },
+        {
+          id: "U7",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_2 \\sqrt{8}$",
+          x: "log_2 √8",
+          a: 3 / 2,
+          z: [
+            [3, "gubi pierwiastek"],
+            [1 / 2, "gubi to, że 8 to 2^3"],
+          ],
+          zr: "Zad. 1",
+        },
+        {
+          id: "U8",
+          s: "U",
+          t: "num",
+          q: "Oblicz: $\\log_3 \\dfrac{1}{\\sqrt{27}}$",
+          x: "log_3 (1/√27)",
+          a: -3 / 2,
+          z: [
+            [3 / 2, "gubi minus przy odwrotności"],
+            [-3, "gubi pierwiastek"],
+          ],
+          zr: "Zad. 2",
+        },
+
+        // Z: podstawa ułamkowa albo z pierwiastkiem
+        {
+          id: "Z1",
+          s: "Z",
+          t: "num",
+          q: "Oblicz: $\\log_{\\frac12} 2$",
+          x: "log_(1/2) 2",
+          a: -1,
+          z: [[1, "nie widzi, że (1/2)^1 to nie 2"]],
+          zr: "Zad. 3",
+        },
+        {
+          id: "Z2",
+          s: "Z",
+          t: "num",
+          q: "Oblicz: $\\log_{\\frac12} \\dfrac14$",
+          x: "log_(1/2) (1/4)",
+          a: 2,
+          z: [[-2, "myśli, że ułamek zawsze daje minus"]],
+          zr: "Zad. 3",
+        },
+        {
+          id: "Z3",
+          s: "Z",
+          t: "num",
+          q: "Oblicz: $\\log_{\\frac13} 27$",
+          x: "log_(1/3) 27",
+          a: -3,
+          z: [[3, "gubi minus przy podstawie ułamkowej"]],
+          zr: "Zad. 3 (ramka)",
+        },
+        {
+          id: "Z4",
+          s: "Z",
+          t: "num",
+          q: "Oblicz: $\\log_{\\sqrt2} 4$",
+          x: "log_√2 4",
+          a: 4,
+          z: [
+            [2, "traktuje √2 jak 2"],
+            [1, "nie wie, co zrobić z pierwiastkiem w podstawie"],
+          ],
+          zr: "Zad. 9f",
+        },
+
+        // O: szukanie podstawy albo liczby
+        {
+          id: "O1",
+          s: "O",
+          t: "num",
+          q: "Znajdź podstawę $a$: $\\;\\log_a 16 = 4$",
+          x: "log_a 16 = 4, a = ?",
+          a: 2,
+          z: [
+            [4, "dzieli liczbę przez wynik"],
+            [64, "mnoży liczbę przez wynik"],
+          ],
+          zr: "Zad. 4",
+        },
+        {
+          id: "O2",
+          s: "O",
+          t: "num",
+          q: "Znajdź podstawę $a$: $\\;\\log_a 16 = -1$",
+          x: "log_a 16 = -1, a = ?",
+          a: 1 / 16,
+          z: [
+            [-16, "ujemny wykładnik traktuje jak liczbę ujemną"],
+            [16, "gubi minus"],
+          ],
+          zr: "Zad. 4",
+        },
+        {
+          id: "O3",
+          s: "O",
+          t: "num",
+          q: "Znajdź liczbę $b$: $\\;\\log_2 b = 5$",
+          x: "log_2 b = 5, b = ?",
+          a: 32,
+          z: [
+            [10, "mnoży podstawę przez wynik"],
+            [25, "zamienia podstawę z wykładnikiem"],
+          ],
+          zr: "Zad. 9a",
+        },
+        {
+          id: "O4",
+          s: "O",
+          t: "num",
+          q: "Znajdź liczbę $b$: $\\;\\log_7 b = 0$",
+          x: "log_7 b = 0, b = ?",
+          a: 1,
+          z: [
+            [0, "myśli, że potęga zerowa daje 0"],
+            [7, "myli log_a 1 z log_a a"],
+          ],
+          zr: "Zad. 9d",
+        },
+        {
+          id: "O5",
+          s: "O",
+          t: "num",
+          q: "Znajdź liczbę $b$: $\\;\\log_8 b = -1$",
+          x: "log_8 b = -1, b = ?",
+          a: 1 / 8,
+          z: [[-8, "ujemny wykładnik traktuje jak liczbę ujemną"]],
+          zr: "Zad. 9h",
+        },
+        {
+          id: "O6",
+          s: "O",
+          t: "num",
+          q: "Znajdź liczbę $b$: $\\;\\log_{27} b = \\dfrac23$",
+          x: "log_27 b = 2/3, b = ?",
+          a: 9,
+          z: [
+            [18, "mnoży podstawę przez ułamek"],
+            [3, "tylko pierwiastkuje, bez potęgi"],
+          ],
+          zr: "Zad. 9c",
+        },
+        {
+          id: "O7",
+          s: "O",
+          t: "num",
+          q: "Znajdź liczbę $b$: $\\;\\log_{\\sqrt2} b = -6$",
+          x: "log_√2 b = -6, b = ?",
+          a: 1 / 8,
+          z: [
+            [8, "gubi minus"],
+            [1 / 64, "traktuje √2 jak 2"],
+          ],
+          zr: "Zad. 9f",
+        },
+        {
+          id: "O8",
+          s: "O",
+          t: "num",
+          q: "Znajdź liczbę $b$: $\\;\\log_{\\frac{1}{16}} b = -\\dfrac34$",
+          x: "log_(1/16) b = -3/4, b = ?",
+          a: 8,
+          z: [[1 / 8, "gubi minus przy podstawie ułamkowej"]],
+          zr: "Zad. 9e",
+        },
+
+        // W: wzory
+        {
+          id: "W1",
+          s: "W",
+          t: "wybor",
+          q: "$\\log_a (b \\cdot c) = \\;?$",
+          x: "wzór na log_a(bc)",
+          o: [
+            { t: "$\\log_a b + \\log_a c$", ok: 1 },
+            {
+              t: "$\\log_a b \\cdot \\log_a c$",
+              z: "myli wzór na iloczyn: mnoży logarytmy",
+            },
+            {
+              t: "$\\log_a (b + c)$",
+              z: "myli wzór na iloczyn: dodaje liczby",
+            },
+            {
+              t: "$\\log_a b - \\log_a c$",
+              z: "myli wzór na iloczyn z ilorazem",
+            },
+          ],
+          zr: "Twierdzenie",
+        },
+        {
+          id: "W2",
+          s: "W",
+          t: "wybor",
+          q: "$\\log_a \\dfrac{b}{c} = \\;?$",
+          x: "wzór na log_a(b/c)",
+          o: [
+            { t: "$\\log_a b - \\log_a c$", ok: 1 },
+            {
+              t: "$\\dfrac{\\log_a b}{\\log_a c}$",
+              z: "myli wzór na iloraz: dzieli logarytmy",
+            },
+            {
+              t: "$\\log_a b + \\log_a c$",
+              z: "myli wzór na iloraz z iloczynem",
+            },
+          ],
+          zr: "Twierdzenie",
+        },
+        {
+          id: "W3",
+          s: "W",
+          t: "wybor",
+          q: "$\\log_a b^{p} = \\;?$",
+          x: "wzór na log_a(b^p)",
+          o: [
+            { t: "$p \\cdot \\log_a b$", ok: 1 },
+            {
+              t: "$(\\log_a b)^{p}$",
+              z: "myli wzór na potęgę: potęguje logarytm",
+            },
+            {
+              t: "$\\log_a b + p$",
+              z: "myli wzór na potęgę: dodaje wykładnik",
+            },
+          ],
+          zr: "Twierdzenie",
+        },
+        {
+          id: "W4",
+          s: "W",
+          t: "wybor",
+          q: "Czy to prawda? $\\;\\log_2 (8 + 8) = \\log_2 8 + \\log_2 8$",
+          x: "log_2(8+8) = log_2 8 + log_2 8 ?",
+          o: [
+            { t: "Fałsz", ok: 1 },
+            { t: "Prawda", z: "myśli, że logarytm sumy to suma logarytmów" },
+          ],
+          zr: "pułapka do Twierdzenia",
+        },
+        {
+          id: "W5",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_2 (64 \\cdot 256)$",
+          x: "log_2(64·256)",
+          a: 14,
+          z: [[48, "mnoży logarytmy zamiast dodawać"]],
+          zr: "Ćw. 5",
+        },
+        {
+          id: "W6",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_2 \\dfrac{0{,}5}{64}$",
+          x: "log_2(0,5/64)",
+          a: -7,
+          z: [
+            [-5, "gubi minus przy log_2 0,5"],
+            [7, "gubi minus"],
+            [5, "odejmuje w złej kolejności"],
+          ],
+          zr: "Ćw. 6",
+        },
+        {
+          id: "W7",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_2 \\dfrac{\\sqrt2}{8}$",
+          x: "log_2(√2/8)",
+          a: -5 / 2,
+          z: [
+            [5 / 2, "odejmuje w złej kolejności"],
+            [1 / 6, "dzieli logarytmy zamiast odejmować"],
+          ],
+          zr: "Ćw. 6",
+        },
+        {
+          id: "W8",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_2 4^{10}$",
+          x: "log_2 4^10",
+          a: 20,
+          z: [
+            [10, "gubi log_2 4 = 2"],
+            [1024, "potęguje logarytm"],
+          ],
+          zr: "Ćw. 7",
+        },
+        {
+          id: "W9",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_3 81^{-4}$",
+          x: "log_3 81^(-4)",
+          a: -16,
+          z: [
+            [16, "gubi minus w wykładniku"],
+            [-4, "gubi log_3 81 = 4"],
+          ],
+          zr: "Ćw. 7",
+        },
+        {
+          id: "W10",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log 2 + \\log 5$",
+          x: "log 2 + log 5",
+          a: 1,
+          z: [[7, "dodaje liczby zamiast mnożyć"]],
+          zr: "Zad. 7a",
+        },
+        {
+          id: "W11",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log 150 - \\log 15$",
+          x: "log 150 − log 15",
+          a: 1,
+          z: [[135, "odejmuje liczby zamiast dzielić"]],
+          zr: "Zad. 7d",
+        },
+        {
+          id: "W12",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log 1250 - \\log \\dfrac54$",
+          x: "log 1250 − log(5/4)",
+          a: 3,
+          z: [],
+          zr: "Zad. 7e",
+        },
+        {
+          id: "W13",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log \\dfrac13 - \\log 3\\tfrac13$",
+          x: "log(1/3) − log(3 1/3)",
+          a: -1,
+          z: [[1, "gubi minus"]],
+          zr: "Zad. 7f",
+        },
+        {
+          id: "W14",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_2 1 + \\dfrac12 \\log_2 16$",
+          x: "log_2 1 + ½·log_2 16",
+          a: 2,
+          z: [
+            [3, "myli log_2 1 z 1"],
+            [4, "gubi ½"],
+          ],
+          zr: "Zad. 8a",
+        },
+        {
+          id: "W15",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_4 2 + \\log_9 3$",
+          x: "log_4 2 + log_9 3",
+          a: 1,
+          z: [[5, "myli logarytm z dzieleniem (4:2 + 9:3)"]],
+          zr: "Zad. 8f",
+        },
+        {
+          id: "W16",
+          s: "W",
+          t: "num",
+          q: "Oblicz: $\\log_3 \\dfrac19 - \\log_{\\frac13} 3$",
+          x: "log_3(1/9) − log_(1/3) 3",
+          a: -1,
+          z: [
+            [-3, "odejmuje liczbę ujemną jak dodatnią"],
+            [1, "gubi minus"],
+          ],
+          zr: "Zad. 8e",
+        },
+      ];
+      // QEND
+
+      const KLUCZ = "logarytmy-diagnoza-v1";
+      let stan = wczytaj() || { i: -1, odp: {}, start: null };
+      let pokazTeraz = Date.now();
+      let wybrane = [];
+
+      function wczytaj() {
+        try {
+          return JSON.parse(localStorage.getItem(KLUCZ));
+        } catch (e) {
+          return null;
+        }
+      }
+      function zapisz() {
+        try {
+          localStorage.setItem(KLUCZ, JSON.stringify(stan));
+        } catch (e) {}
+      }
+
+      function wzory(s) {
+        return s
+          .split(/(\$[^$]+\$)/g)
+          .map((k) => {
+            if (k.startsWith("$") && k.endsWith("$") && k.length > 1) {
+              try {
+                return katex.renderToString(k.slice(1, -1), {
+                  throwOnError: false,
+                });
+              } catch (e) {
+                return k;
+              }
+            }
+            return k;
+          })
+          .join("");
+      }
+
+      // Zamienia wpis ucznia na liczbę: 3, -2, 1/2, -3/2, 0,25, 1 1/2. Zwraca null, gdy nie da się odczytać.
+      function liczba(w) {
+        let s = String(w)
+          .trim()
+          .replace(/[−–—]/g, "-")
+          .replace(/^[a-zA-Z]\s*=\s*/, "")
+          .replace(/\s+/g, " ");
+        s = s.replace(/(\d),(\d)/g, "$1.$2");
+        let m;
+        if ((m = s.match(/^(-?)\s*(\d+) (\d+)\s*\/\s*(\d+)$/))) {
+          if (+m[4] === 0) return null;
+          const v = +m[2] + +m[3] / +m[4];
+          return m[1] === "-" ? -v : v;
+        }
+        if ((m = s.match(/^(-?)\s*(\d+(?:\.\d+)?)\s*\/\s*(\d+(?:\.\d+)?)$/))) {
+          if (+m[3] === 0) return null;
+          const v = +m[2] / +m[3];
+          return m[1] === "-" ? -v : v;
+        }
+        if (/^-?\s*\d+(\.\d+)?$/.test(s)) return +s.replace(/\s/g, "");
+        return null;
+      }
+      const rowne = (a, b) => Math.abs(a - b) < 1e-9;
+      const sekundy = (ms) => Math.round(ms / 1000);
+
+      function render() {
+        const app = document.getElementById("app");
+        if (stan.i < 0) return startowa(app);
+        if (stan.i >= Q.length) return raport(app);
+        pytanie(app);
+      }
+
+      function zakresHTML() {
+        return `<ol class="zakres">
+<li><b>Logarytm dziesiętny.</b> $\\log b = x$, gdy $10^x = b$. Przykład 1, Ćw. 1: $\\log 1000$, $\\log 0{,}1$, $\\log\\sqrt{10}$, $\\log\\sqrt[3]{10}$.</li>
+<li><b>Logarytm o dowolnej podstawie.</b> $\\log_a b = x$, gdy $a^x = b$, przy warunkach $a>0$, $a\\ne 1$, $b>0$. Przykłady 2–3, Ćw. 2–3.</li>
+<li><b>Nazwy:</b> podstawa logarytmu, liczba logarytmowana, logarytm (wynik).</li>
+<li><b>Dwie własności:</b> $\\log_a 1 = 0$ i $\\log_a a = 1$ wraz z uzasadnieniem (Ćw. 4).</li>
+<li><b>Wyniki ujemne i ułamkowe:</b> liczby typu $\\tfrac18$, $\\sqrt2$, $\\sqrt[5]{2}$, $3\\sqrt3$, $\\tfrac{1}{\\sqrt{27}}$ (Zad. 1–2).</li>
+<li><b>Podstawa ułamkowa i z pierwiastkiem:</b> $\\log_{\\frac12}$, $\\log_{\\frac13}$, $\\log_{\\sqrt2}$, $\\log_{\\frac1{16}}$ (Zad. 3, Zad. 9).</li>
+<li><b>Szukanie brakującej podstawy</b> (Zad. 4) <b>albo liczby logarytmowanej</b> (Zad. 9).</li>
+<li><b>Trzy wzory:</b> logarytm iloczynu, ilorazu i potęgi (Twierdzenie, Przykłady 4–5, Ćw. 5–7, Zad. 5–8), także z logarytmem dziesiętnym ($\\log 2 + \\log 5$) i z różnymi podstawami w jednym działaniu (Zad. 8).</li>
+</ol>
+<p class="szary">Pod spodem wszystkiego leżą potęgi o wykładniku ujemnym i wymiernym oraz zamiana pierwiastka na potęgę. Wzoru na zmianę podstawy i dowodów twierdzeń w tej sekcji nie ma (podręcznik odkłada dowody na później), więc ich nie sprawdzam.</p>`;
+      }
+
+      function startowa(app) {
+        const zaczete = Object.keys(stan.odp).length > 0;
+        app.innerHTML = `
+  <h1>Logarytmy</h1>
+  <p class="szary">Sprawdzam, co już umiesz z sekcji 1.10 „Logarytm i jego własności”.</p>
+  <div class="karta">
+    <p><b>To nie jest sprawdzian na ocenę.</b> Wynik pokaże, czego trzeba się jeszcze nauczyć, żeby lekcje były o tym, czego nie umiesz, a nie o tym, co już wiesz.</p>
+    <p>Dlatego: <b>nie zgaduj</b>. Jak nie wiesz, kliknij „Nie wiem”. Strzał w ciemno psuje wynik bardziej niż „Nie wiem”.</p>
+    <p>Bez kalkulatora. Kartka i długopis się przydadzą.</p>
+    <p>${Q.length} pytań, około 30–40 minut. Możesz przerwać: postęp zostaje w telefonie.</p>
+    <p class="szary male">Ułamek wpisuj tak: <b>3/2</b>. Liczbę ujemną z minusem: <b>-2</b>. Dziesiętną z przecinkiem: <b>0,25</b>.</p>
+    <button class="glowny" id="go">${zaczete ? "Wróć do pytań" : "Zaczynam"}</button>
+  </div>
+  <details class="karta"><summary>Zakres materiału (dla rodzica)</summary>${wzory(zakresHTML())}</details>`;
+        document.getElementById("go").onclick = () => {
+          if (!stan.start) stan.start = Date.now();
+          const pierwszy = Q.findIndex((p) => !stan.odp[p.id]);
+          stan.i = pierwszy < 0 ? Q.length : pierwszy;
+          zapisz();
+          render();
+        };
+      }
+
+      // Stała dla danego pytania kolejność opcji, żeby dobra odpowiedź nie stała zawsze na tym samym miejscu.
+      function kolejnosc(p) {
+        let z = 0;
+        for (const c of p.id) z = (z * 31 + c.charCodeAt(0)) >>> 0;
+        const los = () => {
+          z = (Math.imul(z, 1103515245) + 12345) >>> 0;
+          return z / 4294967296;
+        };
+        const k = p.o.map((_, i) => i);
+        for (let i = k.length - 1; i > 0; i--) {
+          const j = Math.floor(los() * (i + 1));
+          [k[i], k[j]] = [k[j], k[i]];
+        }
+        return k;
+      }
+
+      function pytanie(app) {
+        const p = Q[stan.i],
+          sek = SEKCJE[p.s];
+        const pierwszyWSekcji = stan.i === 0 || Q[stan.i - 1].s !== p.s;
+        const nrSek = Object.keys(SEKCJE).indexOf(p.s) + 1;
+        const poprz = stan.odp[p.id];
+        wybrane = poprz && poprz.wyb ? poprz.wyb.slice() : [];
+        let cialo = "";
+        if (p.t === "num") {
+          const wart =
+            poprz && !poprz.nw && poprz.w != null
+              ? String(poprz.w).replace(/"/g, "&quot;")
+              : "";
+          cialo = `<input type="text" id="w" inputmode="text" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false" placeholder="wpisz wynik" value="${wart}">`;
+        } else {
+          cialo = kolejnosc(p)
+            .map((k) => [p.o[k], k])
+            .map(
+              ([o, k]) =>
+                `<button class="opcja ${p.t === "multi" ? "multi" : ""} ${wybrane.includes(k) ? "wybrana" : ""}" data-k="${k}"><span class="znak"></span><span>${wzory(o.t)}</span></button>`,
+            )
+            .join("");
+        }
+        app.innerHTML = `
+  <div class="sekcja">Część ${nrSek} z ${Object.keys(SEKCJE).length}: ${sek.n}</div>
+  <div class="pasek"><div style="width:${Math.round((100 * stan.i) / Q.length)}%"></div></div>
+  <div class="szary male">Pytanie ${stan.i + 1} z ${Q.length}</div>
+  <div class="karta">
+    ${pierwszyWSekcji ? `<div class="wstep-sekcji">${sek.d}</div>` : ""}
+    <div class="pytanie">${wzory(p.q)}</div>
+    ${cialo}
+    <div class="blad" id="blad"></div>
+    <div class="rzad"><button class="drugi" id="nw">Nie wiem</button><button class="glowny" id="dalej">Dalej</button></div>
+    <div class="rzad">${stan.i > 0 ? '<button class="drugi" id="wstecz">← Wstecz</button>' : ""}<button class="drugi" id="przerwa">Przerwa</button></div>
+  </div>`;
+        pokazTeraz = Date.now();
+        const inp = document.getElementById("w");
+        if (inp) {
+          inp.focus();
+          inp.addEventListener("keydown", (e) => {
+            if (e.key === "Enter") dalej();
+          });
+        }
+        app.querySelectorAll(".opcja").forEach(
+          (b) =>
+            (b.onclick = () => {
+              const k = +b.dataset.k;
+              if (p.t === "multi")
+                wybrane = wybrane.includes(k)
+                  ? wybrane.filter((x) => x !== k)
+                  : wybrane.concat(k);
+              else wybrane = [k];
+              app
+                .querySelectorAll(".opcja")
+                .forEach((x) =>
+                  x.classList.toggle("wybrana", wybrane.includes(+x.dataset.k)),
+                );
+            }),
+        );
+        document.getElementById("dalej").onclick = dalej;
+        document.getElementById("nw").onclick = () => zapiszOdp({ nw: true });
+        const ws = document.getElementById("wstecz");
+        if (ws)
+          ws.onclick = () => {
+            dolicz();
+            stan.i--;
+            zapisz();
+            render();
+          };
+        document.getElementById("przerwa").onclick = () => {
+          dolicz();
+          stan.i = -1;
+          zapisz();
+          render();
+        };
+        window.scrollTo(0, 0);
+      }
+
+      // Czas spędzony nad pytaniem bez zapisanej odpowiedzi też się liczy (wstecz, przerwa).
+      function dolicz() {
+        const p = Q[stan.i];
+        if (!p) return;
+        stan.czasBez = stan.czasBez || {};
+        stan.czasBez[p.id] =
+          (stan.czasBez[p.id] || 0) + (Date.now() - pokazTeraz);
+      }
+
+      function dalej() {
+        const p = Q[stan.i],
+          blad = document.getElementById("blad");
+        if (p.t === "num") {
+          const w = document.getElementById("w").value.trim();
+          if (!w) {
+            blad.textContent = "Wpisz wynik albo kliknij „Nie wiem”.";
+            return;
+          }
+          const v = liczba(w);
+          if (v === null) {
+            blad.textContent =
+              "Nie umiem odczytać tej odpowiedzi. Wpisz liczbę, np. 3, -2, 1/2, 0,25.";
+            return;
+          }
+          zapiszOdp({ w, v });
+        } else {
+          if (!wybrane.length) {
+            blad.textContent =
+              p.t === "multi"
+                ? "Zaznacz co najmniej jedną odpowiedź albo kliknij „Nie wiem”."
+                : "Wybierz odpowiedź albo kliknij „Nie wiem”.";
+            return;
+          }
+          zapiszOdp({ wyb: wybrane.slice().sort((a, b) => a - b) });
+        }
+      }
+
+      function zapiszOdp(o) {
+        const p = Q[stan.i];
+        const stare = stan.odp[p.id];
+        const ms =
+          Date.now() -
+          pokazTeraz +
+          ((stare && stare.ms) || 0) +
+          ((stan.czasBez && stan.czasBez[p.id]) || 0);
+        if (stan.czasBez) delete stan.czasBez[p.id];
+        stan.odp[p.id] = Object.assign(
+          { ms, zmiany: stare ? (stare.zmiany || 0) + 1 : 0 },
+          o,
+        );
+        stan.i++;
+        if (stan.i >= Q.length) stan.koniec = Date.now();
+        zapisz();
+        render();
+      }
+
+      // Ocena jednej odpowiedzi: wynik ok / zle / nw / brak, co wpisał, dobra odpowiedź, nazwy błędów.
+      function ocen(p) {
+        const o = stan.odp[p.id];
+        if (!o)
+          return {
+            wynik: "brak",
+            pokaz: "brak odpowiedzi",
+            dobra: dobraTekst(p),
+            bledy: [],
+          };
+        if (o.nw)
+          return {
+            wynik: "nw",
+            pokaz: "nie wiem",
+            dobra: dobraTekst(p),
+            bledy: [],
+          };
+        if (p.t === "num") {
+          if (rowne(o.v, p.a))
+            return { wynik: "ok", pokaz: o.w, dobra: dobraTekst(p), bledy: [] };
+          const z = (p.z || []).find(([w]) => rowne(w, o.v));
+          return {
+            wynik: "zle",
+            pokaz: o.w,
+            dobra: dobraTekst(p),
+            bledy: [z ? z[1] : "błąd nieopisany: trzeba zobaczyć, jak liczy"],
+          };
+        }
+        if (p.t === "wybor") {
+          const op = p.o[o.wyb[0]];
+          return op.ok
+            ? {
+                wynik: "ok",
+                pokaz: czysty(op.t),
+                dobra: dobraTekst(p),
+                bledy: [],
+              }
+            : {
+                wynik: "zle",
+                pokaz: czysty(op.t),
+                dobra: dobraTekst(p),
+                bledy: [op.z],
+              };
+        }
+        const bledy = [];
+        p.o.forEach((op, k) => {
+          const zazn = o.wyb.includes(k);
+          if (!!op.ok !== zazn)
+            bledy.push(
+              (zazn ? "zaznaczył " : "pominął ") + czysty(op.t) + ": " + op.z,
+            );
+        });
+        return {
+          wynik: bledy.length ? "zle" : "ok",
+          pokaz: o.wyb.map((k) => czysty(p.o[k].t)).join("; "),
+          dobra: dobraTekst(p),
+          bledy,
+        };
+      }
+      // Wzór KaTeX na zwykły tekst do raportu.
+      function czysty(t) {
+        return t
+          .replace(/\$/g, "")
+          .replace(/\\[dt]?frac\{?(\d+)\}?\{?(\d+)\}?/g, "$1/$2")
+          .replace(/\\dfrac\{([^}]*)\}\{([^}]*)\}/g, "($1)/($2)")
+          .replace(/\\cdot/g, "·")
+          .replace(/\\ne/g, "≠")
+          .replace(/\\log/g, "log")
+          .replace(/\\;/g, " ")
+          .replace(/[{}\\]/g, "");
+      }
+      function ulamek(v) {
+        if (Number.isInteger(v)) return String(v);
+        for (let m = 2; m <= 200; m++) {
+          const l = v * m;
+          if (Math.abs(l - Math.round(l)) < 1e-9)
+            return `${Math.round(l)}/${m}`;
+        }
+        return String(v).replace(".", ",");
+      }
+      function dobraTekst(p) {
+        if (p.t === "num") return ulamek(p.a);
+        return p.o
+          .filter((o) => o.ok)
+          .map((o) => czysty(o.t))
+          .join("; ");
+      }
+
+      function tekstRaportu() {
+        const linie = [];
+        const d = new Date(stan.koniec || Date.now());
+        const lacz = Object.values(stan.odp).reduce(
+          (s, o) => s + (o.ms || 0),
+          0,
+        );
+        linie.push("LOGARYTMY: diagnoza (sekcja 1.10)");
+        linie.push(
+          `Data: ${d.toLocaleString("pl-PL")} · czas nad pytaniami: ${Math.round(lacz / 60000)} min`,
+        );
+        let ok = 0,
+          nw = 0,
+          zle = 0,
+          brak = 0;
+        Q.forEach((p) => {
+          const r = ocen(p).wynik;
+          if (r === "ok") ok++;
+          else if (r === "nw") nw++;
+          else if (r === "zle") zle++;
+          else brak++;
+        });
+        linie.push(
+          `Razem: dobrze ${ok}, źle ${zle}, nie wiem ${nw}${brak ? `, bez odpowiedzi ${brak}` : ""}, z ${Q.length}`,
+        );
+        linie.push("");
+        Object.entries(SEKCJE).forEach(([k, s]) => {
+          const ps = Q.filter((p) => p.s === k);
+          const oc = ps.map(ocen);
+          linie.push(
+            `== ${s.n}: dobrze ${oc.filter((r) => r.wynik === "ok").length}/${ps.length}, nie wiem ${oc.filter((r) => r.wynik === "nw").length}`,
+          );
+          ps.forEach((p, j) => {
+            const r = oc[j],
+              o = stan.odp[p.id];
+            const zn = { ok: "OK  ", nw: "NW  ", zle: "ŹLE ", brak: "--  " }[
+              r.wynik
+            ];
+            let l = `${zn}${p.id} [${p.zr}] ${p.x} → ${r.pokaz}`;
+            if (r.wynik !== "ok") l += ` (dobrze: ${r.dobra})`;
+            if (o)
+              l +=
+                ` · ${sekundy(o.ms)} s` +
+                (o.zmiany ? ` · zmieniał ${o.zmiany}×` : "");
+            linie.push(l);
+            r.bledy.forEach((b) => linie.push("      ↳ " + b));
+          });
+          linie.push("");
+        });
+        return linie.join("\n");
+      }
+
+      function raport(app) {
+        const oc = Q.map(ocen);
+        const ok = oc.filter((r) => r.wynik === "ok").length;
+        const wiersze = Object.entries(SEKCJE)
+          .map(([k, s]) => {
+            const idx = Q.map((p, i) => (p.s === k ? i : -1)).filter(
+              (i) => i >= 0,
+            );
+            const d = idx.filter((i) => oc[i].wynik === "ok").length,
+              n = idx.filter((i) => oc[i].wynik === "nw").length;
+            return `<tr><td>${s.n}</td><td class="ok">${d}/${idx.length}</td><td class="nw">${n}</td></tr>`;
+          })
+          .join("");
+        const esc = (s) =>
+          String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;");
+        const lista = Q.map((p, i) => {
+          const r = oc[i];
+          const kl = r.wynik === "ok" ? "ok" : r.wynik === "nw" ? "nw" : "nie";
+          const zn = {
+            ok: "dobrze",
+            nw: "nie wiem",
+            zle: "źle",
+            brak: "pominięte",
+          }[r.wynik];
+          return `<tr><td>${wzory(p.q)}</td><td><span class="${kl}">${zn}</span>${r.wynik === "zle" ? `<br><span class="male">twoja: ${esc(r.pokaz)}</span>` : ""}${r.wynik !== "ok" ? `<br><span class="male">dobrze: ${esc(r.dobra)}</span>` : ""}</td></tr>`;
+        }).join("");
+        app.innerHTML = `
+  <h1>Gotowe</h1>
+  <div class="karta">
+    <p>Dobrze: <b>${ok}</b> z ${Q.length}.</p>
+    <p>Teraz <b>wyślij wynik tacie</b>. Na jego podstawie powstaną lekcje dokładnie o tym, czego jeszcze brakuje.</p>
+    <button class="glowny" id="wyslij">Wyślij wynik tacie</button>
+    <div class="rzad"><button class="drugi" id="kopiuj">Kopiuj tekst wyniku</button></div>
+    <div class="szary male" id="info"></div>
+  </div>
+  <h2>Wynik w częściach</h2>
+  <div class="karta"><table><tr><th>Część</th><th>Dobrze</th><th>Nie wiem</th></tr>${wiersze}</table></div>
+  <h2>Wszystkie pytania</h2>
+  <div class="karta"><table>${lista}</table></div>
+  <div class="karta">
+    <button class="drugi" id="wroc" style="width:100%">Wróć do pytań</button>
+    <div class="rzad"><button class="drugi" id="reset">Zacznij od nowa</button></div>
+    <div class="szary male" id="resetinfo"></div>
+  </div>`;
+        const tekst = tekstRaportu();
+        const info = document.getElementById("info");
+        const pokazTekst = () => {
+          info.innerHTML =
+            '<textarea style="width:100%;height:200px" readonly>' +
+            esc(tekst) +
+            "</textarea>";
+        };
+        const kopiuj = () => {
+          if (navigator.clipboard)
+            navigator.clipboard
+              .writeText(tekst)
+              .then(
+                () =>
+                  (info.textContent = "Skopiowane. Wklej tacie w wiadomość."),
+                pokazTekst,
+              );
+          else pokazTekst();
+        };
+        document.getElementById("wyslij").onclick = () => {
+          if (navigator.share)
+            navigator.share({ title: "Logarytmy: diagnoza", text: tekst }).then(
+              () => (info.textContent = "Wysłane."),
+              () => {},
+            );
+          else kopiuj();
+        };
+        document.getElementById("kopiuj").onclick = kopiuj;
+        document.getElementById("wroc").onclick = () => {
+          stan.i = 0;
+          zapisz();
+          render();
+        };
+        let klik = 0;
+        document.getElementById("reset").onclick = () => {
+          if (++klik < 2) {
+            document.getElementById("resetinfo").textContent =
+              "Kliknij jeszcze raz, żeby skasować wszystkie odpowiedzi.";
+            return;
+          }
+          stan = { i: -1, odp: {}, start: null };
+          zapisz();
+          render();
+        };
+        window.scrollTo(0, 0);
+      }
+
+      render();
+    </script>
+  </body>
+</html>
